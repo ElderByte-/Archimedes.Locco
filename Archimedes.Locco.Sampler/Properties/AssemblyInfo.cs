@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Archimedes.Locco.Sampler")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Sampler to test error reporting")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("ElderByte")]
 [assembly: AssemblyProduct("Archimedes.Locco.Sampler")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Archimedes.Locco.BackendProviders;
+using Archimedes.Locco.StackTrace;
 
 namespace Archimedes.Locco
 {
     public class IssueReportService
     {
         private readonly Dictionary<string, IReportBackend> _reportBackends = new Dictionary<string, IReportBackend>();
+        private readonly IStackTraceProvider _stackTraceProvider;
 
         #region Constructor
 
@@ -18,16 +20,18 @@ namespace Archimedes.Locco
         /// Creates a new IssueReportService, without any report backends.
         /// You have to register them yourself using RegisterBackend()!
         /// </summary>
-        public IssueReportService()
+        public IssueReportService(IStackTraceProvider stackTraceProvider)
         {
-            
+            _stackTraceProvider = stackTraceProvider;
         }
 
         /// <summary>
         /// Creates a new IssueReportService with the default report backends 
         /// </summary>
         /// <param name="configuration"></param>
-        public IssueReportService(IPropertyProvider configuration)
+        /// <param name="stackTraceProvider"></param>
+        public IssueReportService(IPropertyProvider configuration, IStackTraceProvider stackTraceProvider)
+            :this(stackTraceProvider)
         {
             if(configuration == null) throw new ArgumentNullException("configuration");
             RegisterBackend(new GitHubProvider(configuration));
@@ -70,7 +74,7 @@ namespace Archimedes.Locco
         {
             if(string.IsNullOrEmpty(ActiveBackend))throw new ReportSendException("You have to set an active report backend first before using the report method!");
 
-            PrepareIssueReport(report);
+            await PrepareIssueReport(report);
 
             if (_reportBackends.ContainsKey(ActiveBackend))
             {
@@ -94,7 +98,7 @@ namespace Archimedes.Locco
 
         #region Protected methods
 
-        protected virtual void PrepareIssueReport(IssueReport report)
+        protected async virtual Task PrepareIssueReport(IssueReport report)
         {
             if (report.Environment == null)
             {
@@ -103,7 +107,7 @@ namespace Archimedes.Locco
 
             if (report.Stacktrace == null)
             {
-                report.Stacktrace = ResolveCurrentStacktrace();
+                report.Stacktrace = await ResolveCurrentStacktrace();
             }
         }
 
@@ -113,9 +117,16 @@ namespace Archimedes.Locco
            return EnvironmentBuilder.Current();
         }
 
-        protected virtual string ResolveCurrentStacktrace()
+        protected async virtual Task<string> ResolveCurrentStacktrace()
         {
-            return "stack trace / log";
+            try
+            {
+                return _stackTraceProvider != null ? await _stackTraceProvider.ReadCurrentStackTraceLog() : null;
+            }
+            catch (Exception e)
+            {
+                throw new ReportSendException("Failed to resolve current stacktrace!", e);
+            }
         }
 
 

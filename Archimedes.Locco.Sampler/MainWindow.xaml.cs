@@ -22,14 +22,14 @@ namespace Archimedes.Locco.Sampler
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IssueReportService _issueReportService;
+        private readonly IssueReportService _issueReportService;
 
 
-        public MainWindow(IPropertyProvider configuration)
+        public MainWindow(IssueReportService issueReportService)
         {
             InitializeComponent();
 
-            _issueReportService = new IssueReportService(configuration);
+            _issueReportService = issueReportService;
         }
 
         private async void BtnBasicClick(object sender, RoutedEventArgs args)

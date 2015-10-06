@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Archimedes.Localisation;
 using Archimedes.Locco.UI.Utils;
 
 namespace Archimedes.Locco.UI
@@ -74,8 +75,8 @@ namespace Archimedes.Locco.UI
                     }
                     catch (ReportSendException e)
                     {
-                        MessageBox.Show("Failed to send issue to backend: " + ExceptionUtil.ToErrorMessage(e),
-                            "Issue send error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(Translator.GetTranslation("locco.report.send.failed.description") + "\n\n"+ ExceptionUtil.ToErrorMessage(e),
+                            Translator.GetTranslation("locco.report.send.failed.title"), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     finally
                     {

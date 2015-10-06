@@ -39,7 +39,7 @@ namespace Archimedes.Locco.BackendProviders
             // Creates a new GitHub Issue
             var newIssue = new NewIssue(report.Title)
             {
-                Body = MarkdownReportUtil.CompileBodyMarkdown(report),
+                Body = MarkdownReportUtil.CompileBodyMarkdown(report, 220000),
             };
             //newIssue.Labels.Add("locco");
 

@@ -10,12 +10,12 @@ namespace Archimedes.Locco.BackendProviders
     public static class MarkdownReportUtil
     {
 
-        public static string CompileBodyMarkdown(IssueReport report)
+        public static string CompileBodyMarkdown(IssueReport report, int stackTraceMaxLenght)
         {
 
             var descriptionMd = CompileDescriptionMarkdown(report);
             var environmentMd = CompileEnvironmentMarkdown(report.Environment);
-            var stacktraceMd = CompileStacktraceMarkdown(report.Stacktrace);
+            var stacktraceMd = CompileStacktraceMarkdown(report.Stacktrace, stackTraceMaxLenght);
 
             var markdown = string.Format(
 @"
@@ -70,9 +70,14 @@ Process Architecture | {6}
 environment.OperatingSystem, environment.DotNetVersion, environment.CurrentProcessArchitecture);
         }
 
-        private static string CompileStacktraceMarkdown(string stacktrace)
+        private static string CompileStacktraceMarkdown(string stacktrace, int maxLenght)
         {
             if (string.IsNullOrEmpty(stacktrace)) return "Not available.";
+
+            if (stacktrace.Length > maxLenght)
+            {   // Cut away from the stack trace / log if its too much data
+                stacktrace = stacktrace.Substring(stacktrace.Length - maxLenght, maxLenght);
+            }
 
             return string.Format(
 @"```

@@ -7,6 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using Archimedes.Localisation.Utils;
+using Archimedes.Locco.StackTrace;
+using log4net.Core;
 
 namespace Archimedes.Locco.Sampler
 {
@@ -15,10 +18,32 @@ namespace Archimedes.Locco.Sampler
     /// </summary>
     public partial class App : Application
     {
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            new LoggerConfiguration(AppUtil.AppDataFolder, Level.All);
 
-            var tokenPath = new FileInfo(ApplicaitonBinaryFolder + @"\Resources\token.txt");
+            Log.Info("Starting up Archimedes.Locco.Sampler...");
+
+            var configuration = new MemoryPropertyProvider();
+            configuration.SetProperty("locco.github.appId", "locco-sampler");
+            configuration.SetProperty("locco.github.token", ReadAccessToken());
+            configuration.SetProperty("locco.github.owner", "ElderByte-");
+            configuration.SetProperty("locco.github.repository", "Archimedes.Locco");
+
+            var issueReportService = new IssueReportService(configuration, new FileStackTraceProvider(AppUtil.AppDataFolder + @"\Logs\events.log"));
+
+            var main = new MainWindow(issueReportService);
+            main.Show();
+        }
+
+
+
+
+        private string ReadAccessToken()
+        {
+            var tokenPath = new FileInfo(AppUtil.ApplicaitonBinaryFolder + @"\Resources\token.txt");
 
             string token = null;
             if (tokenPath.Exists)
@@ -27,36 +52,12 @@ namespace Archimedes.Locco.Sampler
             }
             else
             {
-                MessageBox.Show("Could not find token.txt with your private access token!", "No access token", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var errorMsg = "Could not find token.txt with your private access token!";
+                Log.Warn(errorMsg);
+                MessageBox.Show(errorMsg, "No access token", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-
-            var configuration = new MemoryPropertyProvider();
-            configuration.SetProperty("locco.github.appId", "locco-sampler");
-            configuration.SetProperty("locco.github.token", token);
-            configuration.SetProperty("locco.github.owner", "ElderByte-");
-            configuration.SetProperty("locco.github.repository", "Archimedes.Locco");
-
-
-            var main = new MainWindow(configuration);
-            main.Show();
+            return token;
         }
 
-
-        /// <summary>
-        /// Gets the applications binary folder, i.e. the folder where the exe resides.
-        /// </summary>
-        /// <exception cref="NotSupportedException">Thrown when the binary folder could not be retrived.</exception>
-        private static string ApplicaitonBinaryFolder
-        {
-            get
-            {
-                var assembly = Assembly.GetEntryAssembly();
-                if (assembly != null)
-                {
-                    return Path.GetDirectoryName(assembly.Location);
-                }
-                throw new NotSupportedException("Entry Assembly not available! This may occur in specail circumstances, such as when running as Unit Test.");
-            }
-        }
     }
 }
