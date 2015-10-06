@@ -17,6 +17,8 @@ dlg.ShowDialog();
 
 
 # Configuration
+
+### GitHub Configuration
 ```csharp
 
 IPropertyProvider configuration = new MemoryPropertyProvider(); // You would probably integrate your own configuration solution here
