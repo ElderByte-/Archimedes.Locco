@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Archimedes.Locco.Views;
 
 namespace Archimedes.Locco.Sampler
 {
@@ -23,15 +24,9 @@ namespace Archimedes.Locco.Sampler
         private IssueReportService _issueReportService;
 
 
-        public MainWindow()
+        public MainWindow(IPropertyProvider configuration)
         {
             InitializeComponent();
-
-            var configuration = new MemoryPropertyProvider();
-            configuration.SetProperty("locco.github.appId", "locco-sampler");
-            configuration.SetProperty("locco.github.token", "");    // TODO Insert valid API token
-            configuration.SetProperty("locco.github.owner", "ElderByte-");
-            configuration.SetProperty("locco.github.repository", "Archimedes.Locco");
 
             _issueReportService = new IssueReportService(configuration);
         }
@@ -42,7 +37,7 @@ namespace Archimedes.Locco.Sampler
             var issue = new IssueReport()
             {
                 Title = "Sample Issue from locco-sampler",
-                Description = "This issue is created automatically to thest this library!",
+                Description = "This issue is created automatically to test this library!",
                 Stacktrace = @"2015-09-16 08:56:39,061 App.UI.MC.UF.SO.Load ERROR - System.Data.SqlClient.SqlException (0x80131904): The conversion of a varchar data type to a datetime data type resulted in an out-of-range value.
    bei System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
    bei System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
@@ -81,6 +76,12 @@ ClientConnectionId:26a388a2-c9cf-4e6e-bd6f-9462674493e2"
                 e = e.InnerException;
             }
             return message;
+        }
+
+        private void BtnDialogClick(object sender, RoutedEventArgs e)
+        {
+            var dlg = new IssueReportDialog();
+            dlg.ShowDialog();
         }
     }
 }
