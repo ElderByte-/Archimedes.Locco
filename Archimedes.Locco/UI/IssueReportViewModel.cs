@@ -9,27 +9,47 @@ namespace Archimedes.Locco.UI
 {
     public class IssueReportViewModel : ViewModelBase
     {
-        private string _title;
-        private string _description;
+        private readonly IssueReport _issue;
 
+
+        public IssueReportViewModel(IssueReport issue)
+        {
+            _issue = issue;
+        }
+
+        /// <summary>
+        /// VM Property
+        /// </summary>
         public string Title
         {
-            get { return _title; }
+            get { return _issue.Title; }
             set
             {
-                _title = value;
+                _issue.Title = value;
                 OnPropertyChanged("Title");
             }
         }
 
+        /// <summary>
+        /// VM Property
+        /// </summary>
         public string Description
         {
-            get { return _description; }
+            get { return _issue.Description; }
             set
             {
-                _description = value;
+                _issue.Description = value;
                 OnPropertyChanged("Description");
             }
+        }
+
+
+        /// <summary>
+        /// Gets / Sets the issue report
+        /// </summary>
+        public IssueReport Issue
+        {
+            get { return _issue; }
         }
     }
 }

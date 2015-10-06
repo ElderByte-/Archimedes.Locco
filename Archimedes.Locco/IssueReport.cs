@@ -20,6 +20,7 @@ namespace Archimedes.Locco
         public string OperatingSystem { get; set; }
 
         public string DotNetVersion { get; set; }
+
         public string CurrentProcessArchitecture { get; set; }
     }
 
@@ -31,6 +32,17 @@ namespace Archimedes.Locco
 
         public IssueReport()
         {
+        }
+
+        public IssueReport(string title)
+        {
+            Title = title;
+        }
+
+        public IssueReport(string title, string description)
+        {
+            Title = title;
+            Description = description;
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using Archimedes.Localisation;
 using Archimedes.Locco.UI.Utils;
+using Octokit;
 
 namespace Archimedes.Locco.UI
 {
@@ -17,10 +18,10 @@ namespace Archimedes.Locco.UI
 
         private readonly IssueReportViewModel _issueReportViewModel;
 
-        public IssueReportDialogViewModel(IIssueReportService issueReportService)
+        public IssueReportDialogViewModel(IIssueReportService issueReportService, IssueReport report)
         {
             _issueReportService = issueReportService;
-            _issueReportViewModel = new IssueReportViewModel();
+            _issueReportViewModel = new IssueReportViewModel(report);
         }
 
 
@@ -28,19 +29,6 @@ namespace Archimedes.Locco.UI
             get { return _issueReportViewModel; }
         }
 
-
-
-        private IssueReport Issue
-        {
-            get
-            {
-                return new IssueReport()
-                {
-                    Title = IssueReportViewModel.Title,
-                    Description = IssueReportViewModel.Description
-                };
-            }
-        }
 
         public Visibility ProgressVisibility
         {
@@ -65,10 +53,8 @@ namespace Archimedes.Locco.UI
 
                     try
                     {
-                        var issue = Issue;
-
                         // Send the report
-                        await _issueReportService.ReportIssueAsync(issue);
+                        await _issueReportService.ReportIssueAsync(IssueReportViewModel.Issue);
 
                         // Close the window after success
                         CloseCommand.Execute(x);
@@ -84,7 +70,8 @@ namespace Archimedes.Locco.UI
                     }
                 }, x =>
                 {
-                    return !string.IsNullOrEmpty(Issue.Title) && !string.IsNullOrEmpty(Issue.Description);
+                    var issue = IssueReportViewModel.Issue;
+                    return !string.IsNullOrEmpty(issue.Title) && !string.IsNullOrEmpty(issue.Description);
                 });
             }
         }

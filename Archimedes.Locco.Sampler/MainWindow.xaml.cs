@@ -72,7 +72,7 @@ ClientConnectionId:26a388a2-c9cf-4e6e-bd6f-9462674493e2"
 
         private void BtnDialogClick(object sender, RoutedEventArgs e)
         {
-            var viewModel = new IssueReportDialogViewModel(_issueReportService);
+            var viewModel = new IssueReportDialogViewModel(_issueReportService, new IssueReport("App Crash Sample"));
             var dlg = new IssueReportDialog(viewModel);
             dlg.ShowDialog();
         }
