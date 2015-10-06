@@ -22,10 +22,10 @@ namespace Archimedes.Locco.Sampler
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly IssueReportService _issueReportService;
+        private readonly IIssueReportService _issueReportService;
 
 
-        public MainWindow(IssueReportService issueReportService)
+        public MainWindow(IIssueReportService issueReportService)
         {
             InitializeComponent();
 
@@ -57,7 +57,7 @@ ClientConnectionId:26a388a2-c9cf-4e6e-bd6f-9462674493e2"
             };
             try
             {
-                await _issueReportService.ReportIssue(issue);
+                await _issueReportService.ReportIssueAsync(issue);
 
                 MessageBox.Show("Issue has been successfully sent to backend!", "Success!");
             }

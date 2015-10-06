@@ -63,6 +63,7 @@
     <Compile Include="BackendProviders\MarkdownReportUtil.cs" />
     <Compile Include="EnvironmentBuilder.cs" />
     <Compile Include="ExceptionUtil.cs" />
+    <Compile Include="IIssueReportService.cs" />
     <Compile Include="IPropertyProvider.cs" />
     <Compile Include="IReportBackend.cs" />
     <Compile Include="IssueReport.cs" />

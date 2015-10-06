@@ -74,15 +74,22 @@ environment.OperatingSystem, environment.DotNetVersion, environment.CurrentProce
         {
             if (string.IsNullOrEmpty(stacktrace)) return "Not available.";
 
-            if (stacktrace.Length > maxLenght)
-            {   // Cut away from the stack trace / log if its too much data
-                stacktrace = stacktrace.Substring(stacktrace.Length - maxLenght, maxLenght);
-            }
+            // Cut away from the stack trace / log if its too much data
+            stacktrace = TrimStringLenght(stacktrace, maxLenght);
 
             return string.Format(
 @"```
 {0}
 ```", stacktrace);
+        }
+
+        public static string TrimStringLenght(string text, int maxLenght)
+        {
+            if (text.Length > maxLenght)
+            {
+                text = text.Substring(text.Length - maxLenght, maxLenght);
+            }
+            return text;
         }
 
 

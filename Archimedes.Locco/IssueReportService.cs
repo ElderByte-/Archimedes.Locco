@@ -9,12 +9,12 @@ using Archimedes.Locco.StackTrace;
 
 namespace Archimedes.Locco
 {
-    public class IssueReportService
+    public class IssueReportService : IIssueReportService
     {
         private readonly Dictionary<string, IReportBackend> _reportBackends = new Dictionary<string, IReportBackend>();
         private readonly IStackTraceProvider _stackTraceProvider;
 
-        #region Constructor
+        #region Constructors
 
         /// <summary>
         /// Creates a new IssueReportService, without any report backends.
@@ -66,15 +66,18 @@ namespace Archimedes.Locco
 
 
         /// <summary>
-        /// Reports the given issue to the current active backend
+        /// Reports the given issue to the current active backend.
+        /// Certain properties such as the environment and stacktrace are being resolved automatically,
+        /// if you leave them blank/null.
+        /// 
         /// </summary>
-        /// <param name="report"></param>
-        /// <exception cref="ReportSendException"></exception>
-        public async Task ReportIssue(IssueReport report)
+        /// <param name="report">The issue report which will be sent to the backend.</param>
+        /// <exception cref="ReportSendException">Thrown when there was a problem sending the report to the backend.</exception>
+        public async Task ReportIssueAsync(IssueReport report)
         {
             if(string.IsNullOrEmpty(ActiveBackend))throw new ReportSendException("You have to set an active report backend first before using the report method!");
 
-            await PrepareIssueReport(report);
+            await PrepareIssueReportAsync(report);
 
             if (_reportBackends.ContainsKey(ActiveBackend))
             {
@@ -98,7 +101,7 @@ namespace Archimedes.Locco
 
         #region Protected methods
 
-        protected async virtual Task PrepareIssueReport(IssueReport report)
+        protected async virtual Task PrepareIssueReportAsync(IssueReport report)
         {
             if (report.Environment == null)
             {
@@ -107,7 +110,7 @@ namespace Archimedes.Locco
 
             if (report.Stacktrace == null)
             {
-                report.Stacktrace = await ResolveCurrentStacktrace();
+                report.Stacktrace = await ResolveCurrentStacktraceAsync();
             }
         }
 
@@ -117,7 +120,7 @@ namespace Archimedes.Locco
            return EnvironmentBuilder.Current();
         }
 
-        protected async virtual Task<string> ResolveCurrentStacktrace()
+        protected async virtual Task<string> ResolveCurrentStacktraceAsync()
         {
             try
             {

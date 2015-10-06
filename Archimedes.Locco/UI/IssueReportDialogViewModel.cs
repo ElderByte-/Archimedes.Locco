@@ -12,12 +12,12 @@ namespace Archimedes.Locco.UI
 {
     public class IssueReportDialogViewModel : ViewModelBase
     {
-        private readonly IssueReportService _issueReportService;
+        private readonly IIssueReportService _issueReportService;
         private Visibility _progressVisibility = Visibility.Collapsed;
 
         private readonly IssueReportViewModel _issueReportViewModel;
 
-        public IssueReportDialogViewModel(IssueReportService issueReportService)
+        public IssueReportDialogViewModel(IIssueReportService issueReportService)
         {
             _issueReportService = issueReportService;
             _issueReportViewModel = new IssueReportViewModel();
@@ -68,7 +68,7 @@ namespace Archimedes.Locco.UI
                         var issue = Issue;
 
                         // Send the report
-                        await _issueReportService.ReportIssue(issue);
+                        await _issueReportService.ReportIssueAsync(issue);
 
                         // Close the window after success
                         CloseCommand.Execute(x);

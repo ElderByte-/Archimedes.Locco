@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Archimedes.Locco.BackendProviders;
 using NUnit.Framework;
 
@@ -40,6 +37,7 @@ And I continue on next line?")); ;
 And I continue on over next line?")); ;
         }
 
+        [Test]
         public void TestCompileBodyMarkdown()
         {
             IssueReport report = new IssueReport()
@@ -47,12 +45,21 @@ And I continue on over next line?")); ;
                 Title = "Unit Test Report",
                 Description = "This is just a test from a unit test.",
                 Stacktrace = "I am the stacktrace, me frend!",
+                Environment = new EnvironmentDetail()
+                {
+                    AppName = "huhu"
+                }
             };
-
-            report.Environment.AppName = "";
-
-            var markdown = MarkdownReportUtil.CompileBodyMarkdown(report);
+            var markdown = MarkdownReportUtil.CompileBodyMarkdown(report, 1000);
         }
+
+        [TestCase("Simple text", 100, "Simple text")]
+        [TestCase("Simple text", 6, "e text")]
+        public void TestCompileBodyMarkdown(string input, int maxLen, string expected)
+        {
+            Assert.AreEqual(expected, MarkdownReportUtil.TrimStringLenght(input, maxLen));
+        }
+
 
     }
 }
