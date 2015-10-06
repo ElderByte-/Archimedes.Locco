@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Archimedes.Locco.UI;
-using Archimedes.Locco.Views;
+using Archimedes.Locco.UI.Views;
 
 namespace Archimedes.Locco.Sampler
 {

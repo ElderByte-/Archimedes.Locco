@@ -86,6 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\messages\archimedes.locco_fr.properties">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\messages\archimedes.locco_de.properties">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
