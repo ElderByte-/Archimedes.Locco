@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Archimedes.Locco.UI;
 using Archimedes.Locco.Views;
 
 namespace Archimedes.Locco.Sampler
@@ -62,25 +63,17 @@ ClientConnectionId:26a388a2-c9cf-4e6e-bd6f-9462674493e2"
             }
             catch (ReportSendException e)
             {
-                MessageBox.Show("Failed to send issue to backend: " + ToErrorMessage(e), "Issue send error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Failed to send issue to backend: " + ExceptionUtil.ToErrorMessage(e), "Issue send error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             
         }
 
-        private string ToErrorMessage(Exception e)
-        {
-            string message = "";
-            while (e != null)
-            {
-                message += e.Message + " ";
-                e = e.InnerException;
-            }
-            return message;
-        }
+
 
         private void BtnDialogClick(object sender, RoutedEventArgs e)
         {
-            var dlg = new IssueReportDialog();
+            var viewModel = new IssueReportDialogViewModel(_issueReportService);
+            var dlg = new IssueReportDialog(viewModel);
             dlg.ShowDialog();
         }
     }

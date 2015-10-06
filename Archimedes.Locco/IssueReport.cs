@@ -31,7 +31,6 @@ namespace Archimedes.Locco
 
         public IssueReport()
         {
-            Environment = EnvironmentBuilder.Current();
         }
 
         /// <summary>
@@ -52,6 +51,6 @@ namespace Archimedes.Locco
         /// <summary>
         /// Holds environment information of the current process, user and system
         /// </summary>
-        public EnvironmentDetail Environment { get; private set; }
+        public EnvironmentDetail Environment { get; set; }
     }
 }

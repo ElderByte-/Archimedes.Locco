@@ -70,6 +70,8 @@ namespace Archimedes.Locco
         {
             if(string.IsNullOrEmpty(ActiveBackend))throw new ReportSendException("You have to set an active report backend first before using the report method!");
 
+            PrepareIssueReport(report);
+
             if (_reportBackends.ContainsKey(ActiveBackend))
             {
                 var backend = _reportBackends[ActiveBackend];
@@ -87,6 +89,35 @@ namespace Archimedes.Locco
                 throw new ReportSendException(string.Format("No report backend found with id '{0}'", ActiveBackend));
             }
         }
+
+        #endregion
+
+        #region Protected methods
+
+        protected virtual void PrepareIssueReport(IssueReport report)
+        {
+            if (report.Environment == null)
+            {
+                report.Environment = ResolveCurrentEnvironmentDetail();
+            }
+
+            if (report.Stacktrace == null)
+            {
+                report.Stacktrace = ResolveCurrentStacktrace();
+            }
+        }
+
+
+        protected virtual EnvironmentDetail ResolveCurrentEnvironmentDetail()
+        {
+           return EnvironmentBuilder.Current();
+        }
+
+        protected virtual string ResolveCurrentStacktrace()
+        {
+            return "stack trace / log";
+        }
+
 
         #endregion
 

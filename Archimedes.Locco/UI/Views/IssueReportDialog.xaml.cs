@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Archimedes.Locco.UI;
 
 namespace Archimedes.Locco.Views
 {
@@ -20,9 +21,10 @@ namespace Archimedes.Locco.Views
     /// </summary>
     public partial class IssueReportDialog
     {
-        public IssueReportDialog()
+        public IssueReportDialog(IssueReportDialogViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }
