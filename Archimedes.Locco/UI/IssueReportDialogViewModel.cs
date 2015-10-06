@@ -13,17 +13,31 @@ namespace Archimedes.Locco.UI
 {
     public class IssueReportDialogViewModel : ViewModelBase
     {
+        #region Fields
+
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private readonly IIssueReportService _issueReportService;
         private Visibility _progressVisibility = Visibility.Collapsed;
 
         private readonly IssueReportViewModel _issueReportViewModel;
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="issueReportService"></param>
+        /// <param name="report"></param>
         public IssueReportDialogViewModel(IIssueReportService issueReportService, IssueReport report)
         {
             _issueReportService = issueReportService;
             _issueReportViewModel = new IssueReportViewModel(report);
         }
 
+        #endregion
 
         public IssueReportViewModel IssueReportViewModel {
             get { return _issueReportViewModel; }
@@ -59,10 +73,23 @@ namespace Archimedes.Locco.UI
                         // Close the window after success
                         CloseCommand.Execute(x);
                     }
-                    catch (ReportSendException e)
+                    catch (Exception e)
                     {
-                        MessageBox.Show(Translator.GetTranslation("locco.report.send.failed.description") + "\n\n"+ ExceptionUtil.ToErrorMessage(e),
-                            Translator.GetTranslation("locco.report.send.failed.title"), MessageBoxButton.OK, MessageBoxImage.Error);
+                        if (e is ReportSendException)
+                        {
+                            Log.Error("Failed to send report!", e);
+
+                            MessageBox.Show(
+                                Translator.GetTranslation("locco.report.send.failed.description") + "\n\n" +
+                                ExceptionUtil.ToErrorMessage(e),
+                                Translator.GetTranslation("locco.report.send.failed.title"), MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+                        }
+                        else
+                        {
+                            Log.Error("Unhandled exception while sending error report!", e);
+                            throw;
+                        }
                     }
                     finally
                     {

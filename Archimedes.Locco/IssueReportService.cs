@@ -11,8 +11,16 @@ namespace Archimedes.Locco
 {
     public class IssueReportService : IIssueReportService
     {
+        #region Fields
+
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+
         private readonly Dictionary<string, IReportBackend> _reportBackends = new Dictionary<string, IReportBackend>();
         private readonly IStackTraceProvider _stackTraceProvider;
+        private string _activeBackend;
+
+        #endregion
 
         #region Constructors
 
@@ -26,7 +34,7 @@ namespace Archimedes.Locco
         }
 
         /// <summary>
-        /// Creates a new IssueReportService with the default report backends 
+        /// Creates a new IssueReportService with the default report backends (github and soon email)
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="stackTraceProvider"></param>
@@ -44,8 +52,20 @@ namespace Archimedes.Locco
         /// <summary>
         /// Gets/Sets the current backend id-name.
         /// </summary>
-        public string ActiveBackend { get; set; }
+        public string ActiveBackend
+        {
+            get { return _activeBackend; }
+            set
+            {
+                _activeBackend = value;
+                OnActiveBackendChanged(_activeBackend);
+            }
+        }
 
+        private void OnActiveBackendChanged(string newBackendId)
+        {
+            Log.Info(string.Format("IssueReport Backend has changed to '{0}'", newBackendId));
+        }
 
         #endregion
 
