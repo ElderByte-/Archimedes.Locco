@@ -37,6 +37,16 @@ And I continue on next line?")); ;
 And I continue on over next line?")); ;
         }
 
+
+        [Test]
+        public void TestMarkdownQuoteNewlineMulti2()
+        {
+            Assert.AreEqual(
+                ">Im a simple line of text!\r\n\r\n>And I continue on over next line?",
+                MarkdownReportUtil.MarkdownQuote(
+                "Im a simple line of text!\r\n\r\nAnd I continue on over next line?")); ;
+        }
+
         [Test]
         public void TestCompileBodyMarkdown()
         {

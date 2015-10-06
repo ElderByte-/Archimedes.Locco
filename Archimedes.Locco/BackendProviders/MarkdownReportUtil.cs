@@ -101,13 +101,26 @@ environment.OperatingSystem, environment.DotNetVersion, environment.CurrentProce
         /// <returns></returns>
         public static string MarkdownQuote(string text)
         {
-            var quotetText = ">" + text;
+            if(text == null) throw new ArgumentNullException("text");
 
             // Incase we have double new-lines, we need to again add a quote start mark after each of them
-            var regex = new Regex("(\n\n|\r\n\r\n)");
-            quotetText = regex.Replace(quotetText, "$1>");
+            //var regex = new Regex("(\n\n|\r\n\r\n)");
+            var regex = new Regex("((\n|\r\n){2})");
 
-            return quotetText;
+            var paragraphs = regex.Split(text);
+
+            string quotetText = "";
+
+            foreach (var paragraph in paragraphs)
+            {
+                if (!string.IsNullOrWhiteSpace(paragraph))
+                {
+                    var quotedParagraph = ">" + paragraph + Environment.NewLine + Environment.NewLine;
+                    quotetText += quotedParagraph;
+                }
+            }
+
+            return quotetText.Trim(Environment.NewLine.ToCharArray());
         }
     }
 }
