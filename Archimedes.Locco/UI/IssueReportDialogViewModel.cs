@@ -82,6 +82,9 @@ namespace Archimedes.Locco.UI
                     {
                         ProgressVisibility = Visibility.Collapsed;
                     }
+                }, x =>
+                {
+                    return !string.IsNullOrEmpty(Issue.Title) && !string.IsNullOrEmpty(Issue.Description);
                 });
             }
         }
