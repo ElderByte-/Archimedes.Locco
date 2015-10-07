@@ -27,6 +27,11 @@ namespace Archimedes.Locco.Sampler
             Log.Info("Starting up Archimedes.Locco.Sampler...");
 
             var configuration = new MemoryPropertyProvider();
+
+            
+            configuration.SetProperty("locco.backend", "github");   // Set the report backend to use
+
+            // github specific properties, only important if the active backend is 'github'
             configuration.SetProperty("locco.github.appId", "locco-sampler");
             configuration.SetProperty("locco.github.token", ReadAccessToken());
             configuration.SetProperty("locco.github.owner", "ElderByte-");

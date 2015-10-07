@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Archimedes.Localisation;
 using Archimedes.Locco.UI.Utils;
@@ -61,7 +62,7 @@ namespace Archimedes.Locco.UI
         {
             get
             {
-                return new RelayCommand<Window>(async x =>
+                return new RelayCommand<Control>(async x =>
                 {
                     ProgressVisibility = Visibility.Visible;
 
@@ -107,9 +108,13 @@ namespace Archimedes.Locco.UI
         {
             get
             {
-                return new RelayCommand<Window>(x =>
+                return new RelayCommand<DependencyObject>(x =>
                 {
-                    x.Close();
+                    var parentWindow = Window.GetWindow(x);
+                    if (parentWindow != null)
+                    {
+                        parentWindow.Close();
+                    }
                 });
             }
         }

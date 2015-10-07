@@ -6,20 +6,10 @@
         xmlns:wpf="clr-namespace:Archimedes.Localisation.WPF;assembly=Archimedes.Localisation"
         xmlns:views="clr-namespace:Archimedes.Locco.UI.Views"
         mc:Ignorable="d" 
-             x:Name="ReportDialogWindow"
-             Title="{wpf:Localisation Id=locco.report.title}"
-             d:DesignHeight="294.915" d:DesignWidth="472.881">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <views:IssueReportView DataContext="{Binding IssueReportViewModel}"/>
-
-        <Button Content="{wpf:Localisation Id=locco.report.abort}" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ReportDialogWindow}" HorizontalAlignment="Left" Margin="10" Grid.Row="1" VerticalAlignment="Top" MinWidth="75"/>
-        <Button Content="{wpf:Localisation Id=locco.report.send}" Command="{Binding SendCommand}" CommandParameter="{Binding ElementName=ReportDialogWindow}" HorizontalAlignment="Right" Margin="10" Grid.Row="1" VerticalAlignment="Top" MinWidth="75"/>
-        <ProgressBar Visibility="{Binding ProgressVisibility}" IsIndeterminate="True" HorizontalAlignment="Stretch" Height="20" Margin="10" Grid.Row="1" VerticalAlignment="Top" />
-
-    </Grid>
+        Title="{wpf:Localisation Id=locco.report.title}"
+        WindowStartupLocation="CenterScreen"
+        Width="700"
+        Height="400"
+        d:DesignHeight="400" d:DesignWidth="700">
+    <views:IssueReportDialogView/>
 </Window>

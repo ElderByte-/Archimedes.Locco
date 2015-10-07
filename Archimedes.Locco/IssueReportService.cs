@@ -24,14 +24,6 @@ namespace Archimedes.Locco
 
         #region Constructors
 
-        /// <summary>
-        /// Creates a new IssueReportService, without any report backends.
-        /// You have to register them yourself using RegisterBackend()!
-        /// </summary>
-        public IssueReportService(IStackTraceProvider stackTraceProvider)
-        {
-            _stackTraceProvider = stackTraceProvider;
-        }
 
         /// <summary>
         /// Creates a new IssueReportService with the default report backends (github and soon email)
@@ -39,10 +31,13 @@ namespace Archimedes.Locco
         /// <param name="configuration"></param>
         /// <param name="stackTraceProvider"></param>
         public IssueReportService(IPropertyProvider configuration, IStackTraceProvider stackTraceProvider)
-            :this(stackTraceProvider)
         {
-            if(configuration == null) throw new ArgumentNullException("configuration");
-            RegisterBackend(new GitHubProvider(configuration));
+            if (configuration == null) throw new ArgumentNullException("configuration");
+
+            _stackTraceProvider = stackTraceProvider;
+            ActiveBackend = configuration.GetProperty("locco.backend");
+
+            RegisterKnownProviders(configuration);
         }
 
         #endregion
@@ -57,8 +52,11 @@ namespace Archimedes.Locco
             get { return _activeBackend; }
             set
             {
-                _activeBackend = value;
-                OnActiveBackendChanged(_activeBackend);
+                if (_activeBackend != value)
+                {
+                    _activeBackend = value;
+                    OnActiveBackendChanged(_activeBackend);
+                }
             }
         }
 
@@ -120,6 +118,12 @@ namespace Archimedes.Locco
         #endregion
 
         #region Protected methods
+
+        private void RegisterKnownProviders(IPropertyProvider configuration)
+        {
+            RegisterBackend(new GitHubProvider(configuration));
+
+        }
 
         protected async virtual Task PrepareIssueReportAsync(IssueReport report)
         {
