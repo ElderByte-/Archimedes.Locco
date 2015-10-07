@@ -30,10 +30,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Archimedes.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Archimedes.Localisation, Version=0.0.2.0, Culture=neutral, PublicKeyToken=61fc9f1c0f8e34d7, processorArchitecture=MSIL">
@@ -87,12 +88,14 @@
     <Compile Include="UI\Views\IssueReportDialog.xaml.cs">
       <DependentUpon>IssueReportDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Views\IssueReportDialogView.xaml.cs">
+      <DependentUpon>IssueReportDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Views\IssueReportView.xaml.cs">
       <DependentUpon>IssueReportView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Archimedes.snk" />
     <None Include="packages.config" />
     <None Include="Resources\messages\archimedes.locco_fr.properties">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -106,6 +109,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\Views\IssueReportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\IssueReportDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
