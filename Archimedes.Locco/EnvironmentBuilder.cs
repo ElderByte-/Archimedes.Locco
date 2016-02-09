@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Application;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -19,9 +20,8 @@ namespace Archimedes.Locco
             {
                 var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
                 environment.AppName = versionInfo.ProductName;
-                environment.AppVersion = versionInfo.ProductVersion;
             }
-
+            environment.AppVersion = Version;
             environment.User = Environment.UserName;
             environment.ComputerName = Environment.MachineName;
             environment.OperatingSystem = Environment.OSVersion.ToString();
@@ -29,6 +29,27 @@ namespace Archimedes.Locco
             environment.DotNetVersion = Environment.Version.ToString();
 
             return environment;
+        }
+
+
+        private static string Version
+        {
+            get
+            {
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    return ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                }
+                else
+                {
+                    var entryAssembly = Assembly.GetEntryAssembly();
+                    if (entryAssembly != null)
+                    {
+                        return entryAssembly.GetName().Version.ToString();
+                    }
+                    return "unknown";
+                }
+            }
         }
     }
 }
